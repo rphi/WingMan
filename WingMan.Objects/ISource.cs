@@ -10,7 +10,6 @@ namespace WingMan.Objects
 {
     public interface ISource
     {
-        bool Connect();
         void Read();
         bool Send(string s);
         void Close();
@@ -21,5 +20,19 @@ namespace WingMan.Objects
     public enum SourceMode
     {
         None, Arduino
+    }
+
+    public class ArduinoSourceFactoryArgs
+    {
+        public SerialPort Port;
+        public int Faders;
+        public int Buttons;
+
+        public ArduinoSourceFactoryArgs(SerialPort p, int faders, int buttons)
+        {
+            Port = p;
+            Faders = faders;
+            Buttons = buttons;
+        }
     }
 }

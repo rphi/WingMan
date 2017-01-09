@@ -13,17 +13,19 @@ namespace WingMan.Arduino
 {
     public class Connection : IDisposable
     {
-        public SerialPort Port { get; set; }
-        public int Faders { get; set; }
-        public int ButtonBytes { get; set; }
-        public int WordLen { get; set; }
+        public SerialPort Port;
+        public int Faders;
+        public int ButtonBytes;
+        public int WordLen;
+        private DateTime lastRequest;
+        private readonly TimeSpan timeout = TimeSpan.FromMilliseconds(500);
 
-        public Connection(SerialPort port, int faders = 6, int buttonbytes = 1)
+        public Connection(SerialPort port, int faders = 6, int buttons = 8)
         {
             Port = port;
             Port.DataReceived += DataReceived;
             Faders = faders;
-            ButtonBytes = buttonbytes;
+            ButtonBytes = (int)Math.Ceiling(buttons/8.0);
             WordLen = ButtonBytes + Faders;
         }
 
@@ -56,6 +58,7 @@ namespace WingMan.Arduino
                 this.Start();
             }
             Request();
+            lastRequest = DateTime.UtcNow;
         }
 
         public void DataReceived(object o, EventArgs e)
@@ -65,11 +68,11 @@ namespace WingMan.Arduino
                 Byte[] buffer = new byte[WordLen];
                 Port.Read(buffer, 0, WordLen);
 
-                var x = 1;
+                var x = 0;
                 var i = new List<Input>();
                 foreach (var b in buffer)
                 {
-                    if (x <= Faders)
+                    if (x <= Faders - 1)
                     {
                         // current byte is for a fader
                         i.Add(new Input(InputType.Fader, x, b));
@@ -82,19 +85,20 @@ namespace WingMan.Arduino
                         foreach (bool bit in new BitArray(new byte[]{b}))
                         {
                             id = id + 1;
-                            if (bit)
-                            {
-                                //i.Add(new Input(InputType.Button, (id), 1));
-                            }
-
+                            i.Add(new Input(InputType.Button, id, bit ? 0 : 1)); // no, that ternary is the right way around, it's active low
                         }
-                        x = id + x;
                     }
                 }
-                if (i != null)
+
+                if (i.Count > 0)
                 {
                     NewInputsReceived(i, EventArgs.Empty);
                 }
+            }
+            else if (DateTime.UtcNow - lastRequest > timeout) // in case a byte goes missing or something silly?
+            {
+                Port.DiscardInBuffer();
+                Read();
             }
         }
 

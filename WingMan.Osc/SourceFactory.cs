@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WingMan.Objects;
 
@@ -15,16 +16,11 @@ namespace WingMan.Osc
             switch (m)
             {
                 case SourceMode.Arduino:
-                    return CreateArduinoSource(args);
+                    return new Arduino.Source((Objects.ArduinoSourceFactoryArgs) args);
                 default:
                     throw new Exception("Invalid SourceMode");
             }
 
-        }
-
-        public static Arduino.Source CreateArduinoSource(object args)
-        {
-            return new Arduino.Source((SerialPort) args);
         }
     }
 }

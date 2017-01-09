@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WingMan.Objects;
@@ -16,12 +18,14 @@ namespace WingMan
 {
     public partial class MainForm : Form
     {
-        private Task runloopTask;
+        private Thread runloopTask;
         private Runloop loop;
+        private CancellationTokenSource cts;
 
         public MainForm()
         {
             InitializeComponent();
+            cts = new CancellationTokenSource();
         }
 
         private void sourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -43,6 +47,69 @@ namespace WingMan
             }
         }
 
+        private void arduinoSerialPortCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (arduinoSerialPortCombo.Text != "None found")
+            {
+                arduinoSerialPortCombo.Enabled = false;
+                var port = new SerialPort(arduinoSerialPortCombo.Text, 115200);
+                var dialog = new PleaseWait("Checking for Arduino on " + arduinoSerialPortCombo.Text);
+                var dialogthread = new Thread(() => dialog.ShowDialog());
+                dialogthread.Start();
+                try
+                {
+                    port.Open();
+                }
+                catch
+                {
+                    dialogthread.Abort();
+                    MessageBox.Show("Unable to open port " + arduinoSerialPortCombo.Text, "Communication error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    arduinoFWverBox.Text = "";
+                    return;
+                }
+                port.Write("?");
+                Thread.Sleep(1000);
+                var fw = port.ReadExisting();
+                port.Close();
+                if (fw.Split(' ').FirstOrDefault() != "WINGMAN")
+                {
+                    dialogthread.Abort();
+                    arduinoSerialPortCombo.Enabled = true;
+                    MessageBox.Show(
+                        "The device on " + arduinoSerialPortCombo.Text +
+                        " has not been recognised. Please check it is running WingMan firmware.",
+                        "Error communicating with Arduino", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    return;
+                }
+                arduinoFWverBox.Text = fw;
+                var atoms = fw.Split(' ').ToArray();
+                foreach (var i in atoms)
+                {
+                    var s = i.Split(':');
+                    if (s.Length == 1)
+                    {
+                        // this is just the name
+                        continue;
+                    }
+                    if (s.Length == 2)
+                    {
+                        if (s[0] == "F") { arduinoFadersCountBox.Text = s[1];}
+                        if (s[0] == "B") { arduinoButtonsCountBox.Text = s[1];}
+                        continue;
+                    }
+                    throw new Exception("Error parsing Arduino firmware data");
+                }
+                arduinoSerialPortCombo.Enabled = true;
+                dialogthread.Abort();
+            }
+            else
+            {
+                arduinoConfigureButton.Enabled = false;
+                arduinoFWverBox.Text = "";
+            }
+        }
+
         private void SetupArduinoMenu()
         {
             var ports = SerialPort.GetPortNames();
@@ -55,11 +122,9 @@ namespace WingMan
             IPAddress target;
             int port;
             // Check Form
-            if (((SourceMode)sourceModeCombo.SelectedItem == SourceMode.None ||
-                ((SourceMode)sourceModeCombo.SelectedItem == SourceMode.Arduino &&
-                 arduinoSerialPortCombo.SelectedItem is SerialPort)))
+            if ((SourceMode)sourceModeCombo.SelectedItem == SourceMode.None || sourceModeCombo.SelectedItem == null)
             {
-                MessageBox.Show("Error starting","The source has not been configured properly", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error starting","The source has not been selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -85,16 +150,14 @@ namespace WingMan
             statusLabel.BackColor = Color.Cyan;
             var connectionGood = true;
 
-            try
+            switch ((SourceMode) sourceModeCombo.SelectedItem)
             {
-                loop = new Runloop(SourceFactory.CreateSource(SourceMode.Arduino, new SerialPort(arduinoSerialPortCombo.Text, 115200)),
-                    new OscConnection(IPAddress.Parse(targetTextBox.Text), Int32.Parse(targetPortTextBox.Text)));
-                runloopTask = new Task(() => loop.Run());
-                runloopTask.Start();
-            }
-            catch
-            {
-                connectionGood = false;
+                case SourceMode.Arduino:
+                    connectionGood = StartArduino();
+                    break;
+                default:
+                    MessageBox.Show("Error starting", "The source has not been selected", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
             }
             if (connectionGood)
             {
@@ -116,6 +179,33 @@ namespace WingMan
             }
         }
 
+        private bool StartArduino()
+        {
+            var faderCommandMap = new string[]
+            {
+                "/eos/chan/1", "/eos/chan/2", "/eos/chan/3", "/eos/chan/4", "/eos/chan/5", "/eos/chan/6",
+            };
+            var buttonCommandMap = new OscButtonCommandMap[]
+            {
+                new OscButtonCommandMap("/eos/sub", 1), new OscButtonCommandMap("/eos/go"), new OscButtonCommandMap("/eos/go"), new OscButtonCommandMap("/eos/sub", 1), new OscButtonCommandMap("/eos/chan/1/out"), new OscButtonCommandMap("/eos/sub", 1), null, new OscButtonCommandMap("/eos/go"), new OscButtonCommandMap("/eos/sub", 1), new OscButtonCommandMap("/eos/chan/1/out")
+            };
+
+            try
+            {
+                var args = new ArduinoSourceFactoryArgs(new SerialPort(arduinoSerialPortCombo.Text, 115200), int.Parse(arduinoFadersCountBox.Text), int.Parse(arduinoButtonsCountBox.Text));
+
+                loop = new Runloop(SourceFactory.CreateSource(SourceMode.Arduino, args),
+                    new OscConnection(IPAddress.Parse(targetTextBox.Text), Int32.Parse(targetPortTextBox.Text)), new OscProcessor(faderCommandMap, buttonCommandMap));
+                runloopTask = new Thread(loop.Run);
+                runloopTask.Start();
+            }
+            catch 
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void disconnectButton_Click(object sender, EventArgs e)
         {
             Stop();
@@ -131,23 +221,24 @@ namespace WingMan
 
         public void Stop()
         {
-            runloopTask.Dispose();
+            loop.running = false;
         }
     }
 
-    public class Runloop : IDisposable
+    public class Runloop
     {
         public bool running = true;
         private ISource source;
         private OscConnection connection;
-        private OscProcessor processor = new OscProcessor();
+        private OscProcessor processor;
 
-        public Runloop(ISource s, OscConnection c)
+        public Runloop(ISource s, OscConnection c, OscProcessor p)
         {
             source = s;
             source.NewInputsReady += SendMessages;
             source.NoChange += Loop;
             connection = c;
+            processor = p;
         }
 
         public void Run()
@@ -155,6 +246,10 @@ namespace WingMan
             if (running)
             {
                 source.Read();
+            }
+            else
+            {
+                Stop();
             }
         }
 
@@ -166,13 +261,12 @@ namespace WingMan
         public void SendMessages(object ins, EventArgs e)
         {
             var input = (List<Input>) ins;
-            processor.SendCommands(processor.MakeCommands(input), connection);
+            OscProcessor.SendCommands(processor.MakeCommands(input), connection);
             Run();//loop
         }
 
-        public void Dispose()
+        public void Stop()
         {
-            running = false;
             source.Close();
             connection.Dispose();
         }

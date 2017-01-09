@@ -12,14 +12,23 @@ namespace WingMan.Osc
 {
     public class OscProcessor
     {
-        public OscMessage BuildMessage(Input input)
+        private readonly string[] faderCommandMap;
+        private readonly OscButtonCommandMap[] buttonCommandMap;
+
+        public OscProcessor(string[] faderMap, OscButtonCommandMap[] buttonMap)
+        {
+            faderCommandMap = faderMap;
+            buttonCommandMap = buttonMap;
+        }
+
+        public MaybeOscMessage BuildMessage(Input input)
         {
             switch (input.Type)
             {
                 case InputType.Button:
-                    return input.Value == 1 ? new OscMessage("/eos/sub/" + input.Id) : null;
+                    return BuildButtonMessage(input);
                 case InputType.Fader:
-                    return new OscMessage("/eos/chan/" + input.Id, Math.Round(input.Value * 0.39));
+                    return BuildFaderMessage(input);
                 default:
                     return null;
             }
@@ -31,18 +40,97 @@ namespace WingMan.Osc
             foreach (var input in inputs)
             {
                 var msg = BuildMessage(input);
-                commands.Add(msg);
+                if (!msg.IsNull)
+                {
+                    commands.Add(msg.Message);
+                }
             }
             return commands;
         }
 
-        public void SendCommands(List<OscMessage> messages, OscConnection connection)
+        private MaybeOscMessage BuildButtonMessage(Input input)
+        {
+            if (input.Id <= buttonCommandMap.Length)
+            {
+                var map = buttonCommandMap[input.Id];
+                if (map == null)
+                {
+                    return new MaybeOscMessage();
+                }
+                switch (map.Type)
+                {
+                    case OscButtonType.FireOnly:
+                        return new MaybeOscMessage(new OscMessage(map.Address, input.Value));
+                    case OscButtonType.SendId:
+                        if (input.Value == 1)
+                        {
+                            return new MaybeOscMessage(new OscMessage(map.Address, map.Id));
+                        }
+                        return new MaybeOscMessage();
+                }
+            }
+            throw new Exception("Button " + input.Id + " does not have a map.");
+        }
+
+        private MaybeOscMessage BuildFaderMessage(Input input)
+        {
+            if (input.Id <= faderCommandMap.Length)
+            {
+                var map = faderCommandMap[input.Id];
+                return new MaybeOscMessage(new OscMessage(map, (int)input.Value*0.392));
+            }
+            return new MaybeOscMessage();
+        }
+
+        public static void SendCommands(List<OscMessage> messages, OscConnection connection)
         {
             foreach (var message in messages)
             {
                 connection.Send(message);
             }
         }
+    }
+
+    public class MaybeOscMessage
+    {
+        public bool IsNull;
+        public OscMessage Message;
+
+        public MaybeOscMessage(OscMessage m)
+        {
+            Message = m;
+            IsNull = false;
+        }
+
+        public MaybeOscMessage()
+        {
+            IsNull = true;
+        }
+    }
+
+    public class OscButtonCommandMap
+    {
+        public OscButtonType Type;
+        public string Address;
+        public int? Id;
+
+        public OscButtonCommandMap(string address)
+        {
+            Type = OscButtonType.FireOnly;
+            Address = address;
+        }
+
+        public OscButtonCommandMap(string address, int id)
+        {
+            Type = OscButtonType.SendId;
+            Address = address;
+            Id = id;
+        }
+    }
+
+    public enum OscButtonType
+    {
+        SendId, FireOnly
     }
 
     public class OscConnection : IDisposable

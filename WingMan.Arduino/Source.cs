@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -14,15 +15,10 @@ namespace WingMan.Arduino
         private List<Input> lastInputs;
         private List<Input> outputBuffer;
 
-        public Source(SerialPort s)
+        public Source(Objects.ArduinoSourceFactoryArgs args)
         {
-            _connection = new Connection(s);
+            _connection = new Connection(args.Port,args.Faders,args.Buttons);
             _connection.NewInputsReceived += Process;
-        }
-
-        public bool Connect()
-        {
-            return _connection.Start();
         }
 
         public void Read()
