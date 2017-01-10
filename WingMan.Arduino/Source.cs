@@ -27,29 +27,30 @@ namespace WingMan.Arduino
             var newInputs = (List<Input>) i;
             if (lastInputs == null)
             {
-                outputBuffer = newInputs;
+                lastInputs = newInputs;
+                NoChange(new object(), EventArgs.Empty);
+                return;
             }
             if (newInputs != null)
             {
-                if (lastInputs == null)
+                var changedInputs = new List<Input>();
+                foreach (var input in newInputs)
                 {
-                    outputBuffer = newInputs;
-                    lastInputs = newInputs;
+                    var oldinput = lastInputs.FirstOrDefault(x => x.Id == input.Id && x.Type == input.Type);
+                    if (oldinput?.Value != input.Value)
+                    {
+                        changedInputs.Add(input);
+                    }
+                }
+                lastInputs = newInputs;
+                if (changedInputs.Count != 0)
+                {
+                    outputBuffer = changedInputs.ToList();
                     NewInputsReady(outputBuffer, EventArgs.Empty);
                 }
                 else
                 {
-                    var changedInputs = newInputs.Except(lastInputs, new InputComparer()).ToList();
-                    lastInputs = newInputs;
-                    if (changedInputs.Count != 0)
-                    {
-                        outputBuffer = changedInputs.ToList();
-                        NewInputsReady(outputBuffer, EventArgs.Empty);
-                    }
-                    else
-                    {
-                        NoChange(new object(), EventArgs.Empty);
-                    }
+                    NoChange(new object(), EventArgs.Empty);
                 }
             }
             else

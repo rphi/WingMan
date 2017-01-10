@@ -27,6 +27,7 @@ namespace WingMan.Sources
         {
             buttonMapDataGridTypeColumn.DataSource = Enum.GetValues(typeof (OscButtonType));
             buttonMapDataGridTypeColumn.ValueType = typeof (OscButtonType);
+            buttonMapDataGridTargetIdColumn.ValueType = typeof(int);
             var i = 1;
             foreach (var map in ArduinoConfig.ButtonMap)
             {

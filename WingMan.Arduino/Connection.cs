@@ -71,7 +71,7 @@ namespace WingMan.Arduino
                     if (x <= Faders - 1)
                     {
                         // current byte is for a fader
-                        i.Add(new Input(InputType.Fader, x, b));
+                        i.Add(new Input(InputType.Fader, x, (int)Math.Round(b * 0.392)));
                         x = x + 1;
                     }
                     else

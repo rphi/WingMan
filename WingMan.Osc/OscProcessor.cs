@@ -75,7 +75,7 @@ namespace WingMan.Osc
             {
                 var map = faderCommandMap[input.Id];
                 if (map == null) { return new MaybeOscMessage();}
-                return new MaybeOscMessage(new OscMessage(map, (int) Math.Round(input.Value * 0.392)));
+                return new MaybeOscMessage(new OscMessage(map, input.Value));
             }
             return new MaybeOscMessage();
         }
