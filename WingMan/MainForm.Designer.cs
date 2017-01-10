@@ -39,8 +39,16 @@ namespace WingMan
             this.tabPageLog = new System.Windows.Forms.TabPage();
             this.sourceTabPage = new System.Windows.Forms.TabPage();
             this.arduinoSettingsPanel = new System.Windows.Forms.Panel();
+            this.arduinoConfiguredBox = new System.Windows.Forms.CheckBox();
+            this.arduinoFadersCountBox = new System.Windows.Forms.TextBox();
+            this.arduinoIdBox = new System.Windows.Forms.TextBox();
+            this.arduinoButtonsCountBox = new System.Windows.Forms.TextBox();
             this.arduinoConfigureButton = new System.Windows.Forms.Button();
+            this.arduinoFadersCountLabel = new System.Windows.Forms.Label();
             this.arduinoFWverBox = new System.Windows.Forms.TextBox();
+            this.arduinoConfiguredLabel = new System.Windows.Forms.Label();
+            this.arduinoIdLabel = new System.Windows.Forms.Label();
+            this.arduinoButtonsCountLabel = new System.Windows.Forms.Label();
             this.arduinoFWverLabel = new System.Windows.Forms.Label();
             this.arduinoSerialComboLabel = new System.Windows.Forms.Label();
             this.arduinoSettingsLabel = new System.Windows.Forms.Label();
@@ -55,10 +63,8 @@ namespace WingMan
             this.sourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.sourceTextBox = new System.Windows.Forms.TextBox();
             this.disconnectButton = new System.Windows.Forms.Button();
-            this.arduinoButtonsCountLabel = new System.Windows.Forms.Label();
-            this.arduinoButtonsCountBox = new System.Windows.Forms.TextBox();
-            this.arduinoFadersCountLabel = new System.Windows.Forms.Label();
-            this.arduinoFadersCountBox = new System.Windows.Forms.TextBox();
+            this.arduinoHwInfoLabel = new System.Windows.Forms.Label();
+            this.arduinoHwInfoBox = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPageLog.SuspendLayout();
             this.sourceTabPage.SuspendLayout();
@@ -97,7 +103,7 @@ namespace WingMan
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 198);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 212);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(584, 22);
             this.statusStrip1.TabIndex = 6;
@@ -110,7 +116,7 @@ namespace WingMan
             this.tabControl1.Location = new System.Drawing.Point(212, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(360, 183);
+            this.tabControl1.Size = new System.Drawing.Size(360, 197);
             this.tabControl1.TabIndex = 7;
             // 
             // tabPageLog
@@ -120,7 +126,7 @@ namespace WingMan
             this.tabPageLog.Location = new System.Drawing.Point(4, 22);
             this.tabPageLog.Name = "tabPageLog";
             this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(352, 157);
+            this.tabPageLog.Size = new System.Drawing.Size(352, 171);
             this.tabPageLog.TabIndex = 0;
             this.tabPageLog.Text = "OSC Log";
             this.tabPageLog.UseVisualStyleBackColor = true;
@@ -133,18 +139,24 @@ namespace WingMan
             this.sourceTabPage.Location = new System.Drawing.Point(4, 22);
             this.sourceTabPage.Name = "sourceTabPage";
             this.sourceTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.sourceTabPage.Size = new System.Drawing.Size(352, 157);
+            this.sourceTabPage.Size = new System.Drawing.Size(352, 171);
             this.sourceTabPage.TabIndex = 1;
             this.sourceTabPage.Text = "Source";
             this.sourceTabPage.UseVisualStyleBackColor = true;
             // 
             // arduinoSettingsPanel
             // 
+            this.arduinoSettingsPanel.Controls.Add(this.arduinoHwInfoLabel);
+            this.arduinoSettingsPanel.Controls.Add(this.arduinoConfiguredBox);
+            this.arduinoSettingsPanel.Controls.Add(this.arduinoHwInfoBox);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoFadersCountBox);
+            this.arduinoSettingsPanel.Controls.Add(this.arduinoIdBox);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoButtonsCountBox);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoConfigureButton);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoFadersCountLabel);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoFWverBox);
+            this.arduinoSettingsPanel.Controls.Add(this.arduinoConfiguredLabel);
+            this.arduinoSettingsPanel.Controls.Add(this.arduinoIdLabel);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoButtonsCountLabel);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoFWverLabel);
             this.arduinoSettingsPanel.Controls.Add(this.arduinoSerialComboLabel);
@@ -152,9 +164,43 @@ namespace WingMan
             this.arduinoSettingsPanel.Controls.Add(this.arduinoSerialPortCombo);
             this.arduinoSettingsPanel.Location = new System.Drawing.Point(0, 33);
             this.arduinoSettingsPanel.Name = "arduinoSettingsPanel";
-            this.arduinoSettingsPanel.Size = new System.Drawing.Size(352, 124);
+            this.arduinoSettingsPanel.Size = new System.Drawing.Size(352, 138);
             this.arduinoSettingsPanel.TabIndex = 2;
             this.arduinoSettingsPanel.Visible = false;
+            // 
+            // arduinoConfiguredBox
+            // 
+            this.arduinoConfiguredBox.AutoCheck = false;
+            this.arduinoConfiguredBox.AutoSize = true;
+            this.arduinoConfiguredBox.Location = new System.Drawing.Point(331, 111);
+            this.arduinoConfiguredBox.Name = "arduinoConfiguredBox";
+            this.arduinoConfiguredBox.Size = new System.Drawing.Size(15, 14);
+            this.arduinoConfiguredBox.TabIndex = 12;
+            this.arduinoConfiguredBox.UseVisualStyleBackColor = true;
+            // 
+            // arduinoFadersCountBox
+            // 
+            this.arduinoFadersCountBox.Location = new System.Drawing.Point(193, 82);
+            this.arduinoFadersCountBox.Name = "arduinoFadersCountBox";
+            this.arduinoFadersCountBox.ReadOnly = true;
+            this.arduinoFadersCountBox.Size = new System.Drawing.Size(27, 20);
+            this.arduinoFadersCountBox.TabIndex = 11;
+            // 
+            // arduinoIdBox
+            // 
+            this.arduinoIdBox.Location = new System.Drawing.Point(70, 108);
+            this.arduinoIdBox.Name = "arduinoIdBox";
+            this.arduinoIdBox.ReadOnly = true;
+            this.arduinoIdBox.Size = new System.Drawing.Size(150, 20);
+            this.arduinoIdBox.TabIndex = 11;
+            // 
+            // arduinoButtonsCountBox
+            // 
+            this.arduinoButtonsCountBox.Location = new System.Drawing.Point(70, 82);
+            this.arduinoButtonsCountBox.Name = "arduinoButtonsCountBox";
+            this.arduinoButtonsCountBox.ReadOnly = true;
+            this.arduinoButtonsCountBox.Size = new System.Drawing.Size(27, 20);
+            this.arduinoButtonsCountBox.TabIndex = 11;
             // 
             // arduinoConfigureButton
             // 
@@ -165,6 +211,16 @@ namespace WingMan
             this.arduinoConfigureButton.TabIndex = 2;
             this.arduinoConfigureButton.Text = "Configure";
             this.arduinoConfigureButton.UseVisualStyleBackColor = true;
+            this.arduinoConfigureButton.Click += new System.EventHandler(this.arduinoConfigureButton_Click);
+            // 
+            // arduinoFadersCountLabel
+            // 
+            this.arduinoFadersCountLabel.AutoSize = true;
+            this.arduinoFadersCountLabel.Location = new System.Drawing.Point(130, 86);
+            this.arduinoFadersCountLabel.Name = "arduinoFadersCountLabel";
+            this.arduinoFadersCountLabel.Size = new System.Drawing.Size(42, 13);
+            this.arduinoFadersCountLabel.TabIndex = 1;
+            this.arduinoFadersCountLabel.Text = "Faders:";
             // 
             // arduinoFWverBox
             // 
@@ -173,6 +229,33 @@ namespace WingMan
             this.arduinoFWverBox.ReadOnly = true;
             this.arduinoFWverBox.Size = new System.Drawing.Size(276, 20);
             this.arduinoFWverBox.TabIndex = 10;
+            // 
+            // arduinoConfiguredLabel
+            // 
+            this.arduinoConfiguredLabel.AutoSize = true;
+            this.arduinoConfiguredLabel.Location = new System.Drawing.Point(264, 112);
+            this.arduinoConfiguredLabel.Name = "arduinoConfiguredLabel";
+            this.arduinoConfiguredLabel.Size = new System.Drawing.Size(61, 13);
+            this.arduinoConfiguredLabel.TabIndex = 1;
+            this.arduinoConfiguredLabel.Text = "Configured:";
+            // 
+            // arduinoIdLabel
+            // 
+            this.arduinoIdLabel.AutoSize = true;
+            this.arduinoIdLabel.Location = new System.Drawing.Point(7, 111);
+            this.arduinoIdLabel.Name = "arduinoIdLabel";
+            this.arduinoIdLabel.Size = new System.Drawing.Size(58, 13);
+            this.arduinoIdLabel.TabIndex = 1;
+            this.arduinoIdLabel.Text = "Device ID:";
+            // 
+            // arduinoButtonsCountLabel
+            // 
+            this.arduinoButtonsCountLabel.AutoSize = true;
+            this.arduinoButtonsCountLabel.Location = new System.Drawing.Point(7, 86);
+            this.arduinoButtonsCountLabel.Name = "arduinoButtonsCountLabel";
+            this.arduinoButtonsCountLabel.Size = new System.Drawing.Size(46, 13);
+            this.arduinoButtonsCountLabel.TabIndex = 1;
+            this.arduinoButtonsCountLabel.Text = "Buttons:";
             // 
             // arduinoFWverLabel
             // 
@@ -222,9 +305,6 @@ namespace WingMan
             // 
             // sourceModeCombo
             // 
-            this.sourceModeCombo.DataSource = new WingMan.Objects.SourceMode[] {
-        WingMan.Objects.SourceMode.None,
-        WingMan.Objects.SourceMode.Arduino};
             this.sourceModeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.sourceModeCombo.FormattingEnabled = true;
             this.sourceModeCombo.Location = new System.Drawing.Point(70, 6);
@@ -315,45 +395,28 @@ namespace WingMan
             this.disconnectButton.UseVisualStyleBackColor = false;
             this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
-            // arduinoButtonsCountLabel
+            // arduinoHwInfoLabel
             // 
-            this.arduinoButtonsCountLabel.AutoSize = true;
-            this.arduinoButtonsCountLabel.Location = new System.Drawing.Point(7, 86);
-            this.arduinoButtonsCountLabel.Name = "arduinoButtonsCountLabel";
-            this.arduinoButtonsCountLabel.Size = new System.Drawing.Size(46, 13);
-            this.arduinoButtonsCountLabel.TabIndex = 1;
-            this.arduinoButtonsCountLabel.Text = "Buttons:";
+            this.arduinoHwInfoLabel.AutoSize = true;
+            this.arduinoHwInfoLabel.Location = new System.Drawing.Point(196, 32);
+            this.arduinoHwInfoLabel.Name = "arduinoHwInfoLabel";
+            this.arduinoHwInfoLabel.Size = new System.Drawing.Size(49, 13);
+            this.arduinoHwInfoLabel.TabIndex = 13;
+            this.arduinoHwInfoLabel.Text = "HW info:";
             // 
-            // arduinoButtonsCountBox
+            // arduinoHwInfoBox
             // 
-            this.arduinoButtonsCountBox.Enabled = false;
-            this.arduinoButtonsCountBox.Location = new System.Drawing.Point(70, 82);
-            this.arduinoButtonsCountBox.Name = "arduinoButtonsCountBox";
-            this.arduinoButtonsCountBox.Size = new System.Drawing.Size(27, 20);
-            this.arduinoButtonsCountBox.TabIndex = 11;
-            // 
-            // arduinoFadersCountLabel
-            // 
-            this.arduinoFadersCountLabel.AutoSize = true;
-            this.arduinoFadersCountLabel.Location = new System.Drawing.Point(130, 86);
-            this.arduinoFadersCountLabel.Name = "arduinoFadersCountLabel";
-            this.arduinoFadersCountLabel.Size = new System.Drawing.Size(42, 13);
-            this.arduinoFadersCountLabel.TabIndex = 1;
-            this.arduinoFadersCountLabel.Text = "Faders:";
-            // 
-            // arduinoFadersCountBox
-            // 
-            this.arduinoFadersCountBox.Enabled = false;
-            this.arduinoFadersCountBox.Location = new System.Drawing.Point(193, 82);
-            this.arduinoFadersCountBox.Name = "arduinoFadersCountBox";
-            this.arduinoFadersCountBox.Size = new System.Drawing.Size(27, 20);
-            this.arduinoFadersCountBox.TabIndex = 11;
+            this.arduinoHwInfoBox.Location = new System.Drawing.Point(251, 29);
+            this.arduinoHwInfoBox.Name = "arduinoHwInfoBox";
+            this.arduinoHwInfoBox.ReadOnly = true;
+            this.arduinoHwInfoBox.Size = new System.Drawing.Size(95, 20);
+            this.arduinoHwInfoBox.TabIndex = 11;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 220);
+            this.ClientSize = new System.Drawing.Size(584, 234);
             this.Controls.Add(this.sourceLinkLabel);
             this.Controls.Add(this.sourceTextBox);
             this.Controls.Add(this.targetPortTextBox);
@@ -409,6 +472,12 @@ namespace WingMan
         private System.Windows.Forms.TextBox arduinoButtonsCountBox;
         private System.Windows.Forms.Label arduinoFadersCountLabel;
         private System.Windows.Forms.Label arduinoButtonsCountLabel;
+        private System.Windows.Forms.TextBox arduinoIdBox;
+        private System.Windows.Forms.Label arduinoIdLabel;
+        private System.Windows.Forms.CheckBox arduinoConfiguredBox;
+        private System.Windows.Forms.Label arduinoConfiguredLabel;
+        private System.Windows.Forms.Label arduinoHwInfoLabel;
+        private System.Windows.Forms.TextBox arduinoHwInfoBox;
     }
 }
 

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 using Rug.Osc;
+using System;
+using System.Collections.Generic;
+using System.Net;
 using WingMan.Objects;
 
 namespace WingMan.Osc
@@ -52,8 +49,8 @@ namespace WingMan.Osc
         {
             if (input.Id <= buttonCommandMap.Length)
             {
-                var map = buttonCommandMap[input.Id];
-                if (map == null)
+                var map = buttonCommandMap[input.Id - 1]; // zero based array, 1 based id
+                if (map?.Address == "")
                 {
                     return new MaybeOscMessage();
                 }
@@ -77,17 +74,15 @@ namespace WingMan.Osc
             if (input.Id <= faderCommandMap.Length)
             {
                 var map = faderCommandMap[input.Id];
-                return new MaybeOscMessage(new OscMessage(map, (int)input.Value*0.392));
+                if (map == null) { return new MaybeOscMessage();}
+                return new MaybeOscMessage(new OscMessage(map, (int) Math.Round(input.Value * 0.392)));
             }
             return new MaybeOscMessage();
         }
 
         public static void SendCommands(List<OscMessage> messages, OscConnection connection)
         {
-            foreach (var message in messages)
-            {
-                connection.Send(message);
-            }
+            connection.Send(messages);
         }
     }
 
@@ -113,6 +108,23 @@ namespace WingMan.Osc
         public OscButtonType Type;
         public string Address;
         public int? Id;
+
+        [JsonConstructor]
+        public OscButtonCommandMap(OscButtonType type, string address, int? id)
+        {
+            switch (type)
+            {
+                case OscButtonType.FireOnly:
+                    Type = OscButtonType.FireOnly;
+                    Address = address;
+                    break;
+                case OscButtonType.SendId:
+                    Type = OscButtonType.SendId;
+                    Address = address;
+                    Id = id;
+                    break;
+            }
+        }
 
         public OscButtonCommandMap(string address)
         {
@@ -156,6 +168,15 @@ namespace WingMan.Osc
                 Sender.Connect();
             }
             Sender.Send(s);
+        }
+
+        public void Send(List<OscMessage> messages)
+        {
+            foreach (var message in messages)
+            {
+                Sender.Send(message);
+            }
+            Sender.WaitForAllMessagesToComplete();
         }
     }
 }

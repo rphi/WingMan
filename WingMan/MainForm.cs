@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using WingMan.Objects;
 using WingMan.Osc;
+using WingMan.Sources;
 
 namespace WingMan
 {
@@ -20,12 +16,14 @@ namespace WingMan
     {
         private Thread runloopTask;
         private Runloop loop;
-        private CancellationTokenSource cts;
+        private ArduinoConfigObject currentArduinoConfig;
+        private ConfigLibrary configLibrary;
 
         public MainForm()
         {
             InitializeComponent();
-            cts = new CancellationTokenSource();
+            configLibrary = ConfigLibrary.CreateConfigLibrary();
+            sourceModeCombo.DataSource = Enum.GetValues(typeof(SourceMode));
         }
 
         private void sourceLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -52,6 +50,7 @@ namespace WingMan
             if (arduinoSerialPortCombo.Text != "None found")
             {
                 arduinoSerialPortCombo.Enabled = false;
+                arduinoConfigureButton.Enabled = false;
                 var port = new SerialPort(arduinoSerialPortCombo.Text, 115200);
                 var dialog = new PleaseWait("Checking for Arduino on " + arduinoSerialPortCombo.Text);
                 var dialogthread = new Thread(() => dialog.ShowDialog());
@@ -62,7 +61,7 @@ namespace WingMan
                 }
                 catch
                 {
-                    dialogthread.Abort();
+                    if (dialogthread.IsAlive) { dialogthread.Abort(); }
                     MessageBox.Show("Unable to open port " + arduinoSerialPortCombo.Text, "Communication error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     arduinoFWverBox.Text = "";
@@ -74,7 +73,7 @@ namespace WingMan
                 port.Close();
                 if (fw.Split(' ').FirstOrDefault() != "WINGMAN")
                 {
-                    dialogthread.Abort();
+                    if (dialogthread.IsAlive) { dialogthread.Abort(); }
                     arduinoSerialPortCombo.Enabled = true;
                     MessageBox.Show(
                         "The device on " + arduinoSerialPortCombo.Text +
@@ -92,21 +91,33 @@ namespace WingMan
                         // this is just the name
                         continue;
                     }
-                    if (s.Length == 2)
-                    {
-                        if (s[0] == "F") { arduinoFadersCountBox.Text = s[1];}
-                        if (s[0] == "B") { arduinoButtonsCountBox.Text = s[1];}
-                        continue;
-                    }
-                    throw new Exception("Error parsing Arduino firmware data");
+                    if (s.Length != 2) throw new Exception("Error parsing Arduino firmware data");
+
+                    if (s[0] == "F") { arduinoFadersCountBox.Text = s[1];} // number of faders
+                    if (s[0] == "B") { arduinoButtonsCountBox.Text = s[1];} // number of buttons
+                    if (s[0] == "P") { arduinoHwInfoBox.Text = s[1];} // hardware platform
+                    if (s[0] == "I") { arduinoIdBox.Text = s[1];} // device ID
+                }
+                if (configLibrary.ArduinoConfigs.ContainsKey(arduinoIdBox.Text))
+                {
+                    currentArduinoConfig = configLibrary.ArduinoConfigs[arduinoIdBox.Text];
+                    arduinoConfiguredBox.Checked = true;
+                }
+                else
+                {
+                    currentArduinoConfig = new ArduinoConfigObject(arduinoIdBox.Text, arduinoHwInfoBox.Text, int.Parse(arduinoFadersCountBox.Text), int.Parse(arduinoButtonsCountBox.Text));
+                    arduinoConfiguredBox.Checked = false;
                 }
                 arduinoSerialPortCombo.Enabled = true;
-                dialogthread.Abort();
+                arduinoConfigureButton.Enabled = true;
+                if (dialogthread.IsAlive) { dialogthread.Abort();}
             }
             else
             {
                 arduinoConfigureButton.Enabled = false;
                 arduinoFWverBox.Text = "";
+                arduinoButtonsCountBox.Text = "";
+                arduinoFadersCountBox.Text = "";
             }
         }
 
@@ -181,21 +192,18 @@ namespace WingMan
 
         private bool StartArduino()
         {
-            var faderCommandMap = new string[]
+            if (!arduinoConfiguredBox.Checked)
             {
-                "/eos/chan/1", "/eos/chan/2", "/eos/chan/3", "/eos/chan/4", "/eos/chan/5", "/eos/chan/6",
-            };
-            var buttonCommandMap = new OscButtonCommandMap[]
-            {
-                new OscButtonCommandMap("/eos/sub", 1), new OscButtonCommandMap("/eos/go"), new OscButtonCommandMap("/eos/go"), new OscButtonCommandMap("/eos/sub", 1), new OscButtonCommandMap("/eos/chan/1/out"), new OscButtonCommandMap("/eos/sub", 1), null, new OscButtonCommandMap("/eos/go"), new OscButtonCommandMap("/eos/sub", 1), new OscButtonCommandMap("/eos/chan/1/out")
-            };
-
+                MessageBox.Show("Error starting Arduino", "Arduino input mapping not configured", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return false;
+            }
             try
             {
-                var args = new ArduinoSourceFactoryArgs(new SerialPort(arduinoSerialPortCombo.Text, 115200), int.Parse(arduinoFadersCountBox.Text), int.Parse(arduinoButtonsCountBox.Text));
+                var args = new ArduinoSourceFactoryArgs(new SerialPort(arduinoSerialPortCombo.Text, 115200), currentArduinoConfig.Faders, currentArduinoConfig.Buttons);
 
                 loop = new Runloop(SourceFactory.CreateSource(SourceMode.Arduino, args),
-                    new OscConnection(IPAddress.Parse(targetTextBox.Text), Int32.Parse(targetPortTextBox.Text)), new OscProcessor(faderCommandMap, buttonCommandMap));
+                    new OscConnection(IPAddress.Parse(targetTextBox.Text), Int32.Parse(targetPortTextBox.Text)), new OscProcessor(currentArduinoConfig.FaderMap, currentArduinoConfig.ButtonMap));
                 runloopTask = new Thread(loop.Run);
                 runloopTask.Start();
             }
@@ -222,6 +230,24 @@ namespace WingMan
         public void Stop()
         {
             loop.running = false;
+        }
+
+        private void arduinoConfigureButton_Click(object sender, EventArgs e)
+        {
+            using (var form = new ArduinoConfigForm(currentArduinoConfig))
+            {
+                switch (form.ShowDialog())
+                {
+                    case DialogResult.OK:
+                        arduinoConfiguredBox.Checked = true;
+                        configLibrary.AddArduinoConfigObject(form.ArduinoConfig);
+                        currentArduinoConfig = form.ArduinoConfig;
+                        break;
+                    case DialogResult.Cancel:
+                        break;
+                }
+
+            }
         }
     }
 

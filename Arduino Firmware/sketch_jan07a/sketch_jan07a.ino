@@ -7,10 +7,14 @@
  * from A0 - A5 on Arduino
  * Remaining byte, 8 binary inputs for buttons on pins
  * 2 - 9 on Arduino
+ * 
+ * Device ID: ARDUINOUNO-0001
+ * NOTE: these ids need to be unique for the
+ * ConfigLibrary to work correctly
  */
 
 // bytes to store fader values and buttons
-//byte d[6] = {0,0,0,0,0,0,B00000000}
+// byte d[6] = {0,0,0,0,0,0,B00000000}
 
 byte inByte;
 
@@ -38,7 +42,7 @@ void loop() {
         sendData();
         break;
       case B00111111: // ascii '?'
-        Serial.print("WINGMAN P:ARDUINOUNO V:0.0.1 F:6 B:8");
+        Serial.print("WINGMAN P:ARDUINOUNO V:0.0.1 F:6 B:8 I:6c74c2c2-62ec-495c-8e0f-cf8877be322f");
         break;
       default:
         break;
