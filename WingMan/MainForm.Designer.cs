@@ -31,15 +31,14 @@ namespace WingMan
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.connectButton = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPageLog = new System.Windows.Forms.TabPage();
             this.sourceTabPage = new System.Windows.Forms.TabPage();
             this.arduinoSettingsPanel = new System.Windows.Forms.Panel();
+            this.arduinoHwInfoLabel = new System.Windows.Forms.Label();
             this.arduinoConfiguredBox = new System.Windows.Forms.CheckBox();
+            this.arduinoHwInfoBox = new System.Windows.Forms.TextBox();
             this.arduinoFadersCountBox = new System.Windows.Forms.TextBox();
             this.arduinoIdBox = new System.Windows.Forms.TextBox();
             this.arduinoButtonsCountBox = new System.Windows.Forms.TextBox();
@@ -63,32 +62,14 @@ namespace WingMan
             this.sourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.sourceTextBox = new System.Windows.Forms.TextBox();
             this.disconnectButton = new System.Windows.Forms.Button();
-            this.arduinoHwInfoLabel = new System.Windows.Forms.Label();
-            this.arduinoHwInfoBox = new System.Windows.Forms.TextBox();
+            this.oscLogLabel = new System.Windows.Forms.Label();
+            this.oscLog = new System.Windows.Forms.TextBox();
+            this.tabPageLog = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
-            this.tabPageLog.SuspendLayout();
             this.sourceTabPage.SuspendLayout();
             this.arduinoSettingsPanel.SuspendLayout();
+            this.tabPageLog.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(6, 20);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(224, 131);
-            this.textBox1.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(146, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Log: (recent OSC commands)";
             // 
             // connectButton
             // 
@@ -118,18 +99,6 @@ namespace WingMan
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(360, 197);
             this.tabControl1.TabIndex = 7;
-            // 
-            // tabPageLog
-            // 
-            this.tabPageLog.Controls.Add(this.textBox1);
-            this.tabPageLog.Controls.Add(this.label2);
-            this.tabPageLog.Location = new System.Drawing.Point(4, 22);
-            this.tabPageLog.Name = "tabPageLog";
-            this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(352, 171);
-            this.tabPageLog.TabIndex = 0;
-            this.tabPageLog.Text = "OSC Log";
-            this.tabPageLog.UseVisualStyleBackColor = true;
             // 
             // sourceTabPage
             // 
@@ -168,6 +137,15 @@ namespace WingMan
             this.arduinoSettingsPanel.TabIndex = 2;
             this.arduinoSettingsPanel.Visible = false;
             // 
+            // arduinoHwInfoLabel
+            // 
+            this.arduinoHwInfoLabel.AutoSize = true;
+            this.arduinoHwInfoLabel.Location = new System.Drawing.Point(196, 32);
+            this.arduinoHwInfoLabel.Name = "arduinoHwInfoLabel";
+            this.arduinoHwInfoLabel.Size = new System.Drawing.Size(49, 13);
+            this.arduinoHwInfoLabel.TabIndex = 13;
+            this.arduinoHwInfoLabel.Text = "HW info:";
+            // 
             // arduinoConfiguredBox
             // 
             this.arduinoConfiguredBox.AutoCheck = false;
@@ -177,6 +155,14 @@ namespace WingMan
             this.arduinoConfiguredBox.Size = new System.Drawing.Size(15, 14);
             this.arduinoConfiguredBox.TabIndex = 12;
             this.arduinoConfiguredBox.UseVisualStyleBackColor = true;
+            // 
+            // arduinoHwInfoBox
+            // 
+            this.arduinoHwInfoBox.Location = new System.Drawing.Point(251, 29);
+            this.arduinoHwInfoBox.Name = "arduinoHwInfoBox";
+            this.arduinoHwInfoBox.ReadOnly = true;
+            this.arduinoHwInfoBox.Size = new System.Drawing.Size(95, 20);
+            this.arduinoHwInfoBox.TabIndex = 11;
             // 
             // arduinoFadersCountBox
             // 
@@ -395,22 +381,37 @@ namespace WingMan
             this.disconnectButton.UseVisualStyleBackColor = false;
             this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
-            // arduinoHwInfoLabel
+            // oscLogLabel
             // 
-            this.arduinoHwInfoLabel.AutoSize = true;
-            this.arduinoHwInfoLabel.Location = new System.Drawing.Point(196, 32);
-            this.arduinoHwInfoLabel.Name = "arduinoHwInfoLabel";
-            this.arduinoHwInfoLabel.Size = new System.Drawing.Size(49, 13);
-            this.arduinoHwInfoLabel.TabIndex = 13;
-            this.arduinoHwInfoLabel.Text = "HW info:";
+            this.oscLogLabel.AutoSize = true;
+            this.oscLogLabel.Location = new System.Drawing.Point(6, 4);
+            this.oscLogLabel.Name = "oscLogLabel";
+            this.oscLogLabel.Size = new System.Drawing.Size(146, 13);
+            this.oscLogLabel.TabIndex = 3;
+            this.oscLogLabel.Text = "Log: (recent OSC commands)";
             // 
-            // arduinoHwInfoBox
+            // oscLog
             // 
-            this.arduinoHwInfoBox.Location = new System.Drawing.Point(251, 29);
-            this.arduinoHwInfoBox.Name = "arduinoHwInfoBox";
-            this.arduinoHwInfoBox.ReadOnly = true;
-            this.arduinoHwInfoBox.Size = new System.Drawing.Size(95, 20);
-            this.arduinoHwInfoBox.TabIndex = 11;
+            this.oscLog.AcceptsReturn = true;
+            this.oscLog.Location = new System.Drawing.Point(6, 20);
+            this.oscLog.Multiline = true;
+            this.oscLog.Name = "oscLog";
+            this.oscLog.ReadOnly = true;
+            this.oscLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.oscLog.Size = new System.Drawing.Size(340, 145);
+            this.oscLog.TabIndex = 1;
+            // 
+            // tabPageLog
+            // 
+            this.tabPageLog.Controls.Add(this.oscLog);
+            this.tabPageLog.Controls.Add(this.oscLogLabel);
+            this.tabPageLog.Location = new System.Drawing.Point(4, 22);
+            this.tabPageLog.Name = "tabPageLog";
+            this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageLog.Size = new System.Drawing.Size(352, 171);
+            this.tabPageLog.TabIndex = 0;
+            this.tabPageLog.Text = "OSC Log";
+            this.tabPageLog.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -431,25 +432,21 @@ namespace WingMan
             this.Name = "MainForm";
             this.Text = "WingMan for Eos";
             this.tabControl1.ResumeLayout(false);
-            this.tabPageLog.ResumeLayout(false);
-            this.tabPageLog.PerformLayout();
             this.sourceTabPage.ResumeLayout(false);
             this.sourceTabPage.PerformLayout();
             this.arduinoSettingsPanel.ResumeLayout(false);
             this.arduinoSettingsPanel.PerformLayout();
+            this.tabPageLog.ResumeLayout(false);
+            this.tabPageLog.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button connectButton;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPageLog;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label statusLabel;
         private System.Windows.Forms.TextBox targetTextBox;
@@ -478,6 +475,9 @@ namespace WingMan
         private System.Windows.Forms.Label arduinoConfiguredLabel;
         private System.Windows.Forms.Label arduinoHwInfoLabel;
         private System.Windows.Forms.TextBox arduinoHwInfoBox;
+        private System.Windows.Forms.TabPage tabPageLog;
+        private System.Windows.Forms.TextBox oscLog;
+        private System.Windows.Forms.Label oscLogLabel;
     }
 }
 

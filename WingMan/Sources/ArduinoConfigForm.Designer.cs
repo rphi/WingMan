@@ -32,15 +32,15 @@
             this.faderMapDataGridIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.faderMapDataGridTargetColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonMapDataGrid = new System.Windows.Forms.DataGridView();
-            this.buttonMapDataGridIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.buttonMapDataGridTypeColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.buttonMapDataGridTargetColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.buttonMapDataGridTargetIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.fadersGroupBox = new System.Windows.Forms.GroupBox();
             this.buttonsGroupBox = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.saveButton = new System.Windows.Forms.Button();
+            this.buttonMapDataGridIdColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonMapDataGridTypeColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.buttonMapDataGridTargetColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.buttonMapDataGridDataColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.faderMapDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.buttonMapDataGrid)).BeginInit();
             this.fadersGroupBox.SuspendLayout();
@@ -84,34 +84,11 @@
             this.buttonMapDataGridIdColumn,
             this.buttonMapDataGridTypeColumn,
             this.buttonMapDataGridTargetColumn,
-            this.buttonMapDataGridTargetIdColumn});
+            this.buttonMapDataGridDataColumn});
             this.buttonMapDataGrid.Location = new System.Drawing.Point(6, 19);
             this.buttonMapDataGrid.Name = "buttonMapDataGrid";
             this.buttonMapDataGrid.Size = new System.Drawing.Size(486, 146);
             this.buttonMapDataGrid.TabIndex = 0;
-            // 
-            // buttonMapDataGridIdColumn
-            // 
-            this.buttonMapDataGridIdColumn.HeaderText = "Button ID";
-            this.buttonMapDataGridIdColumn.Name = "buttonMapDataGridIdColumn";
-            this.buttonMapDataGridIdColumn.ReadOnly = true;
-            this.buttonMapDataGridIdColumn.Width = 50;
-            // 
-            // buttonMapDataGridTypeColumn
-            // 
-            this.buttonMapDataGridTypeColumn.HeaderText = "Type";
-            this.buttonMapDataGridTypeColumn.Name = "buttonMapDataGridTypeColumn";
-            // 
-            // buttonMapDataGridTargetColumn
-            // 
-            this.buttonMapDataGridTargetColumn.HeaderText = "Target";
-            this.buttonMapDataGridTargetColumn.Name = "buttonMapDataGridTargetColumn";
-            this.buttonMapDataGridTargetColumn.Width = 180;
-            // 
-            // buttonMapDataGridTargetIdColumn
-            // 
-            this.buttonMapDataGridTargetIdColumn.HeaderText = "Target ID";
-            this.buttonMapDataGridTargetIdColumn.Name = "buttonMapDataGridTargetIdColumn";
             // 
             // fadersGroupBox
             // 
@@ -162,6 +139,30 @@
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
             // 
+            // buttonMapDataGridIdColumn
+            // 
+            this.buttonMapDataGridIdColumn.HeaderText = "Button ID";
+            this.buttonMapDataGridIdColumn.Name = "buttonMapDataGridIdColumn";
+            this.buttonMapDataGridIdColumn.ReadOnly = true;
+            this.buttonMapDataGridIdColumn.Width = 50;
+            // 
+            // buttonMapDataGridTypeColumn
+            // 
+            this.buttonMapDataGridTypeColumn.HeaderText = "Type";
+            this.buttonMapDataGridTypeColumn.Name = "buttonMapDataGridTypeColumn";
+            // 
+            // buttonMapDataGridTargetColumn
+            // 
+            this.buttonMapDataGridTargetColumn.HeaderText = "Target";
+            this.buttonMapDataGridTargetColumn.Name = "buttonMapDataGridTargetColumn";
+            this.buttonMapDataGridTargetColumn.Width = 180;
+            // 
+            // buttonMapDataGridDataColumn
+            // 
+            this.buttonMapDataGridDataColumn.HeaderText = "Data";
+            this.buttonMapDataGridDataColumn.Name = "buttonMapDataGridDataColumn";
+            this.buttonMapDataGridDataColumn.Width = 75;
+            // 
             // ArduinoConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -197,6 +198,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn buttonMapDataGridIdColumn;
         private System.Windows.Forms.DataGridViewComboBoxColumn buttonMapDataGridTypeColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn buttonMapDataGridTargetColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn buttonMapDataGridTargetIdColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn buttonMapDataGridDataColumn;
     }
 }

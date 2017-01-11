@@ -58,7 +58,7 @@ namespace WingMan.Osc
                 {
                     case OscButtonType.FireOnly:
                         return new MaybeOscMessage(new OscMessage(map.Address, input.Value));
-                    case OscButtonType.SendId:
+                    case OscButtonType.SendData:
                         if (input.Value == 1)
                         {
                             return new MaybeOscMessage(new OscMessage(map.Address, map.Id));
@@ -73,7 +73,7 @@ namespace WingMan.Osc
         {
             if (input.Id <= faderCommandMap.Length)
             {
-                var map = faderCommandMap[input.Id];
+                var map = faderCommandMap[input.Id - 1]; // zero based array, 1 based id
                 if (map == null) { return new MaybeOscMessage();}
                 return new MaybeOscMessage(new OscMessage(map, input.Value));
             }
@@ -118,8 +118,8 @@ namespace WingMan.Osc
                     Type = OscButtonType.FireOnly;
                     Address = address;
                     break;
-                case OscButtonType.SendId:
-                    Type = OscButtonType.SendId;
+                case OscButtonType.SendData:
+                    Type = OscButtonType.SendData;
                     Address = address;
                     Id = id;
                     break;
@@ -134,7 +134,7 @@ namespace WingMan.Osc
 
         public OscButtonCommandMap(string address, int id)
         {
-            Type = OscButtonType.SendId;
+            Type = OscButtonType.SendData;
             Address = address;
             Id = id;
         }
@@ -142,7 +142,7 @@ namespace WingMan.Osc
 
     public enum OscButtonType
     {
-        SendId, FireOnly
+        SendData, FireOnly
     }
 
     public class OscConnection : IDisposable

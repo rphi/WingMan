@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
 using WingMan.Objects;
 
 namespace WingMan.Arduino
@@ -15,6 +16,7 @@ namespace WingMan.Arduino
         {
             _connection = new Connection(args.Port,args.Faders,args.Buttons);
             _connection.NewInputsReceived += Process;
+            _connection.IOTimeout += ConnectionIOTimeout;
         }
 
         public void Read()
@@ -28,7 +30,7 @@ namespace WingMan.Arduino
             if (lastInputs == null)
             {
                 lastInputs = newInputs;
-                NoChange(new object(), EventArgs.Empty);
+                BufferUpdated(new object(), new SourceEventArgs(SourceEvent.NoChange));
                 return;
             }
             if (newInputs != null)
@@ -46,22 +48,20 @@ namespace WingMan.Arduino
                 if (changedInputs.Count != 0)
                 {
                     outputBuffer = changedInputs.ToList();
-                    NewInputsReady(outputBuffer, EventArgs.Empty);
+                    BufferUpdated(outputBuffer, new SourceEventArgs(SourceEvent.NewItems));
                 }
                 else
                 {
-                    NoChange(new object(), EventArgs.Empty);
+                    BufferUpdated(new object(), new SourceEventArgs(SourceEvent.NoChange));
                 }
             }
             else
             {
-                NoChange(new object(), EventArgs.Empty);
+                BufferUpdated(new object(), new SourceEventArgs(SourceEvent.NoChange));
             }
         }
 
-        public event EventHandler NewInputsReady;
-
-        public event EventHandler NoChange;
+        public event EventHandler BufferUpdated;
 
         public bool Send(string s)
         {
@@ -71,6 +71,11 @@ namespace WingMan.Arduino
         public void Close()
         {
             _connection.Dispose();
+        }
+
+        public void ConnectionIOTimeout(object o, ElapsedEventArgs e)
+        {
+            BufferUpdated(o, new SourceEventArgs(SourceEvent.IoError));
         }
     }
 }

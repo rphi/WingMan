@@ -19,12 +19,12 @@ namespace WingMan
         public static ConfigLibrary CreateConfigLibrary()
         {
             // try to load from config file
-            if (File.Exists(Application.StartupPath + "configlibrary.xml"))
+            if (File.Exists(Application.StartupPath + "/configlibrary.json"))
             {
                 TextReader reader = null;
                 try
                 {
-                    reader = new StreamReader(Application.StartupPath + "configlibrary.xml");
+                    reader = new StreamReader(Application.StartupPath + "/configlibrary.json");
                     var fileContents = reader.ReadToEnd();
                     return JsonConvert.DeserializeObject<ConfigLibrary>(fileContents);
                 }
@@ -76,16 +76,18 @@ namespace WingMan
         public string DeviceId;
         public int Faders;
         public int Buttons;
+        public string Version;
 
         public OscButtonCommandMap[] ButtonMap { get; set; }
         public string[] FaderMap { get; set; }
 
-        public ArduinoConfigObject(string deviceId, string hardware, int faders, int buttons)
+        public ArduinoConfigObject(string deviceId, string hardware, int faders, int buttons, string ver)
         {
             Hardware = hardware;
             DeviceId = deviceId;
             Faders = faders;
             Buttons = buttons;
+            Version = ver;
         }
     }
 }

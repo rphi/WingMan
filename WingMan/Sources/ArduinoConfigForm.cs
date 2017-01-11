@@ -27,7 +27,7 @@ namespace WingMan.Sources
         {
             buttonMapDataGridTypeColumn.DataSource = Enum.GetValues(typeof (OscButtonType));
             buttonMapDataGridTypeColumn.ValueType = typeof (OscButtonType);
-            buttonMapDataGridTargetIdColumn.ValueType = typeof(int);
+            buttonMapDataGridDataColumn.ValueType = typeof(int);
             var i = 1;
             foreach (var map in ArduinoConfig.ButtonMap)
             {
@@ -99,12 +99,12 @@ namespace WingMan.Sources
                     case OscButtonType.FireOnly:
                         newBmapArray[(int)row.Cells[0].Value - 1] = new OscButtonCommandMap((string) row.Cells[2].Value);
                         break;
-                    case OscButtonType.SendId:
+                    case OscButtonType.SendData:
                         if (row.Cells[3].Value == null)
                         {
                             MessageBox.Show(
                                 "Unable to save row " + row.Cells[0].Value +
-                                " in button map as it is set to the type SendId and no Target ID has been provided. Please correct this before proceeding.",
+                                " in button map as it is set to the type SendData and no Target ID has been provided. Please correct this before proceeding.",
                                 "Error saving", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }

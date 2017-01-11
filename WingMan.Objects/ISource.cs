@@ -13,8 +13,7 @@ namespace WingMan.Objects
         void Read();
         bool Send(string s);
         void Close();
-        event EventHandler NewInputsReady;
-        event EventHandler NoChange;
+        event EventHandler BufferUpdated;
     }
 
     public enum SourceMode
@@ -34,5 +33,20 @@ namespace WingMan.Objects
             Faders = faders;
             Buttons = buttons;
         }
+    }
+
+    public class SourceEventArgs : EventArgs
+    {
+        public SourceEvent Event;
+
+        public SourceEventArgs(SourceEvent e)
+        {
+            Event = e;
+        }
+    }
+
+    public enum SourceEvent
+    {
+        NoChange, NewItems, IoError
     }
 }
