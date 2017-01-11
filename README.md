@@ -1,14 +1,15 @@
 # Welcome
-This is a tool I have built as a poor uni student to allow me to control my laptop
+This is a tool I have built as a cash-strapped uni student to allow me to control my laptop
 running [ETC Nomad](https://www.etcconnect.com/Products/Consoles/Eos-Family/ETCnomad-ETCnomad-Puck/Overview.aspx)
-with physical sliders and buttons.
+with physical sliders and buttons. With a bit of luck this should save me having to rent a proper console for
+at least the smaller shows that I am involved with.
 
 Why build my own, well [~£1000](https://www.etcconnect.com/Products/Consoles/Eos-Family/Accessories/Universal-Fader-Wing/Features.aspx) seems a bit much for me.
 
 ![Main screen](images/main.png)
 
 # Installation
-**Todo:** upload precompiled binaries and ClickOnce installer. Also add makefile.
+You can install the software using ClickOnce [here](ClickOnce/publish.htm).
 
 # Prerequisites
 This project is built using C# and .Net 4.5 with Windows Forms so you will most likely
