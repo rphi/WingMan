@@ -5,7 +5,7 @@ with physical sliders and buttons.
 
 Why build my own, well [~£1000](https://www.etcconnect.com/Products/Consoles/Eos-Family/Accessories/Universal-Fader-Wing/Features.aspx) seems a bit much for me.
 
-![Main screen](images/main.png)
+![Main screen](../images/main.png)
 
 # Installation
 **Todo:** upload precompiled binaries and ClickOnce installer. Also add makefile.
@@ -29,9 +29,9 @@ and .json file), the number of fader bytes to expect and the number of buttons s
 Arduino during the device detection stage after a serial port is selected on the source configuration tab.
 
 An example is below:
-```
-WINGMAN P:ARDUINOUNO V:0.0.1 F:16 B:32 I:7c74c2c2-62ec-495c-8e0f-cf8877be322f
-```
+
+    WINGMAN P:ARDUINOUNO V:0.0.1 F:16 B:32 I:7c74c2c2-62ec-495c-8e0f-cf8877be322f
+
 | "WINGMAN" identifier | firmware version no | number of faders | number of buttons | UUID |
 
 ## Serial Data format
@@ -61,7 +61,7 @@ button to set your OSC mappings.
 Finally add the IP address of the target for OSC packets and the port then hit "Connect". Fingers crossed
 you should start seeing items in the OSC log tab and also packets arriving at your target device!
 
-![Configuration](images/configuration.png)
+![Configuration](../images/configuration.png)
 
 ## OSC mappings
 In the configuration menu enter the addresses for the faders to send their data to. For buttons you can either have
