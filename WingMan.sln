@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26020.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "witgui", "witgui\witgui.csproj", "{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingMan", "WingMan\WingMan.csproj", "{9C0F402E-13BB-424C-B0B5-AC60DEE33707}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WingMan.Arduino", "WingMan.Arduino\WingMan.Arduino.csproj", "{7C20B499-FBC5-44CB-973B-475BB70E6438}"
@@ -25,21 +23,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|ARM.Build.0 = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|x64.Build.0 = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Debug|x86.Build.0 = Debug|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Release|ARM.ActiveCfg = Release|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Release|ARM.Build.0 = Release|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Release|x64.ActiveCfg = Release|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Release|x86.ActiveCfg = Release|Any CPU
-		{5BCF1075-AE62-4CB0-93C3-C0548018F7D6}.Release|x86.Build.0 = Release|Any CPU
 		{9C0F402E-13BB-424C-B0B5-AC60DEE33707}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9C0F402E-13BB-424C-B0B5-AC60DEE33707}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C0F402E-13BB-424C-B0B5-AC60DEE33707}.Debug|ARM.ActiveCfg = Debug|Any CPU

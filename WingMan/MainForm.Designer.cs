@@ -34,6 +34,9 @@ namespace WingMan
             this.connectButton = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPageLog = new System.Windows.Forms.TabPage();
+            this.oscLog = new System.Windows.Forms.TextBox();
+            this.oscLogLabel = new System.Windows.Forms.Label();
             this.sourceTabPage = new System.Windows.Forms.TabPage();
             this.arduinoSettingsPanel = new System.Windows.Forms.Panel();
             this.arduinoHwInfoLabel = new System.Windows.Forms.Label();
@@ -62,13 +65,13 @@ namespace WingMan
             this.sourceLinkLabel = new System.Windows.Forms.LinkLabel();
             this.sourceTextBox = new System.Windows.Forms.TextBox();
             this.disconnectButton = new System.Windows.Forms.Button();
-            this.oscLogLabel = new System.Windows.Forms.Label();
-            this.oscLog = new System.Windows.Forms.TextBox();
-            this.tabPageLog = new System.Windows.Forms.TabPage();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPageLog.SuspendLayout();
             this.sourceTabPage.SuspendLayout();
             this.arduinoSettingsPanel.SuspendLayout();
-            this.tabPageLog.SuspendLayout();
             this.SuspendLayout();
             // 
             // connectButton
@@ -84,6 +87,9 @@ namespace WingMan
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 212);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(584, 22);
@@ -99,6 +105,38 @@ namespace WingMan
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(360, 197);
             this.tabControl1.TabIndex = 7;
+            // 
+            // tabPageLog
+            // 
+            this.tabPageLog.Controls.Add(this.oscLog);
+            this.tabPageLog.Controls.Add(this.oscLogLabel);
+            this.tabPageLog.Location = new System.Drawing.Point(4, 22);
+            this.tabPageLog.Name = "tabPageLog";
+            this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageLog.Size = new System.Drawing.Size(352, 171);
+            this.tabPageLog.TabIndex = 0;
+            this.tabPageLog.Text = "OSC Log";
+            this.tabPageLog.UseVisualStyleBackColor = true;
+            // 
+            // oscLog
+            // 
+            this.oscLog.AcceptsReturn = true;
+            this.oscLog.Location = new System.Drawing.Point(6, 20);
+            this.oscLog.Multiline = true;
+            this.oscLog.Name = "oscLog";
+            this.oscLog.ReadOnly = true;
+            this.oscLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.oscLog.Size = new System.Drawing.Size(340, 145);
+            this.oscLog.TabIndex = 1;
+            // 
+            // oscLogLabel
+            // 
+            this.oscLogLabel.AutoSize = true;
+            this.oscLogLabel.Location = new System.Drawing.Point(6, 4);
+            this.oscLogLabel.Name = "oscLogLabel";
+            this.oscLogLabel.Size = new System.Drawing.Size(146, 13);
+            this.oscLogLabel.TabIndex = 3;
+            this.oscLogLabel.Text = "Log: (recent OSC commands)";
             // 
             // sourceTabPage
             // 
@@ -381,37 +419,19 @@ namespace WingMan
             this.disconnectButton.UseVisualStyleBackColor = false;
             this.disconnectButton.Click += new System.EventHandler(this.disconnectButton_Click);
             // 
-            // oscLogLabel
+            // toolStripStatusLabel1
             // 
-            this.oscLogLabel.AutoSize = true;
-            this.oscLogLabel.Location = new System.Drawing.Point(6, 4);
-            this.oscLogLabel.Name = "oscLogLabel";
-            this.oscLogLabel.Size = new System.Drawing.Size(146, 13);
-            this.oscLogLabel.TabIndex = 3;
-            this.oscLogLabel.Text = "Log: (recent OSC commands)";
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(108, 17);
+            this.toolStripStatusLabel1.Text = "Robert Phipps 2017";
             // 
-            // oscLog
+            // toolStripStatusLabel2
             // 
-            this.oscLog.AcceptsReturn = true;
-            this.oscLog.Location = new System.Drawing.Point(6, 20);
-            this.oscLog.Multiline = true;
-            this.oscLog.Name = "oscLog";
-            this.oscLog.ReadOnly = true;
-            this.oscLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.oscLog.Size = new System.Drawing.Size(340, 145);
-            this.oscLog.TabIndex = 1;
-            // 
-            // tabPageLog
-            // 
-            this.tabPageLog.Controls.Add(this.oscLog);
-            this.tabPageLog.Controls.Add(this.oscLogLabel);
-            this.tabPageLog.Location = new System.Drawing.Point(4, 22);
-            this.tabPageLog.Name = "tabPageLog";
-            this.tabPageLog.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLog.Size = new System.Drawing.Size(352, 171);
-            this.tabPageLog.TabIndex = 0;
-            this.tabPageLog.Text = "OSC Log";
-            this.tabPageLog.UseVisualStyleBackColor = true;
+            this.toolStripStatusLabel2.IsLink = true;
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(136, 17);
+            this.toolStripStatusLabel2.Text = "rphi.github.io/WingMan";
+            this.toolStripStatusLabel2.Click += new System.EventHandler(this.toolStripStatusLabel2_Click);
             // 
             // MainForm
             // 
@@ -431,13 +451,15 @@ namespace WingMan
             this.Controls.Add(this.connectButton);
             this.Name = "MainForm";
             this.Text = "WingMan for Eos";
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tabPageLog.ResumeLayout(false);
+            this.tabPageLog.PerformLayout();
             this.sourceTabPage.ResumeLayout(false);
             this.sourceTabPage.PerformLayout();
             this.arduinoSettingsPanel.ResumeLayout(false);
             this.arduinoSettingsPanel.PerformLayout();
-            this.tabPageLog.ResumeLayout(false);
-            this.tabPageLog.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -478,6 +500,8 @@ namespace WingMan
         private System.Windows.Forms.TabPage tabPageLog;
         private System.Windows.Forms.TextBox oscLog;
         private System.Windows.Forms.Label oscLogLabel;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 

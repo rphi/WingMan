@@ -306,5 +306,10 @@ namespace WingMan
                 }
             }
         }
+
+        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://rphi.github.io/WingMan/");
+        }
     }
 }
