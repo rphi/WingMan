@@ -5,6 +5,8 @@ with physical sliders and buttons.
 
 Why build my own, well [~£1000](https://www.etcconnect.com/Products/Consoles/Eos-Family/Accessories/Universal-Fader-Wing/Features.aspx) seems a bit much for me.
 
+![Main screen](/images/main.png)
+
 # Installation
 **Todo:** upload precompiled binaries and ClickOnce installer. Also add makefile.
 
@@ -58,6 +60,8 @@ button to set your OSC mappings.
 
 Finally add the IP address of the target for OSC packets and the port then hit "Connect". Fingers crossed
 you should start seeing items in the OSC log tab and also packets arriving at your target device!
+
+![Configuration](/images/configuration.png)
 
 ## OSC mappings
 In the configuration menu enter the addresses for the faders to send their data to. For buttons you can either have
