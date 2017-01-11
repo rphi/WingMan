@@ -1,0 +1,13 @@
+# Setup
+title:        WingMan
+tagline:      OSC fader wing for ETC Eos consoles using Arduino
+baseurl:      ""
+paginate:     1
+
+# About/contact
+author:
+  name:       Robert Phipps
+  url:        https://github.com/rphi
+
+#Others
+markdown: kramdown
