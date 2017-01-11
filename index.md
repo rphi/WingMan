@@ -36,6 +36,7 @@ An example is below:
 
 ## Serial Data format
 The Arduino sends a series of bytes to the client software in the following format:
+
 | Fader 1 analog input value | Fader 2 value | Fader 3 value | ... | Buttons 1-8 binary values | Buttons 9-16 values | ... |
 
 Note there is no identification for the bytes; when I started this I thought the serial connection could be the bottleneck so wanted
